@@ -14,9 +14,11 @@ var typing = new Typed (".animate",{
       onComplete: function(self) 
       {
 
-		var x = document.getElementById("work")
-		x.style.visibility = "";
+		var x = document.getElementById("keyboardParent")
+		x.style.display = "block";
 		// setInterval(function(){ alert("Hello"); }, 3000)
+
+            // $("#keyboard").load("keyboard.html"); 
 
 
 
