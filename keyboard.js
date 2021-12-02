@@ -29,22 +29,27 @@ function getTimestamp() {
   return Math.floor(Date.now() / 1000)
 }
 
-function isPhraseEnteredValid(currentResult)
+function isPhraseEnteredValid(currentResult, keyPressed)
 {
   var el = currentResult.innerHTML
-  if (phrases.includes(el))
+  if (phrases.includes(el) && keyPressed === "Enter")
   {
     console.log("this works")
+    var x = document.getElementById("mycv")
+    x.style.display = "block";
   }
 
   else
   {
+    var x = document.getElementById("mycv")
+    x.style.display = "none";
     console.log("no")
   }
 }
 
 function deleteLetter()
 {
+
   var currentResult = document.getElementById("result")
   if(currentResult.innerHTML.length !== 0)
   {
@@ -62,6 +67,9 @@ function deleteLetter()
     }
   }
 
+  isPhraseEnteredValid(currentResult, "None")
+
+
 
 }
 
@@ -72,6 +80,8 @@ function updateHeader(letter)
   {
     updateHeaderInfo.innerHTML = letter
     j++
+
+
   }
   else
   {
@@ -87,7 +97,7 @@ document.addEventListener("keyup", event => {
   {
     var cv = document.getElementById("cv")
     var currentResult = document.getElementById("result")
-    isPhraseEnteredValid(currentResult)
+    isPhraseEnteredValid(currentResult, event.key)
 
     const highlightedKey = document.querySelector(".selected");
   const keyElement = document.getElementById("enter");
@@ -113,6 +123,9 @@ document.addEventListener("keyup", event => {
   {
     const keyPressed = String.fromCharCode(event.keyCode);
     updateHeader(keyPressed)
+
+    var currentResult = document.getElementById("result")
+    isPhraseEnteredValid(currentResult, event.key)
     const keyElement = document.getElementById(keyPressed);
 
       const highlightedKey = document.querySelector(".selected");
