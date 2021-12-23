@@ -47,7 +47,7 @@
             const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 4, height: 4});
 
             const xrPromise = scene.createDefaultXRExperienceAsync({
-                floorMeshes: [ground]
+                referenceSpaceType: "local-floor"
             });
 
             return xrPromise.then((xrExperience) => {
