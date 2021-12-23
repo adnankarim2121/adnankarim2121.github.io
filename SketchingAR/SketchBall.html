@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title>Babylon.js sample code</title>
+
+        <!-- Babylon.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+        <script src="https://preview.babylonjs.com/ammo.js"></script>
+        <script src="https://preview.babylonjs.com/cannon.js"></script>
+        <script src="https://preview.babylonjs.com/Oimo.js"></script>
+        <script src="https://preview.babylonjs.com/earcut.min.js"></script>
+        <script src="https://preview.babylonjs.com/babylon.js"></script>
+        <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+        <script src="https://preview.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+        <script src="https://preview.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+        <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+        <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+        <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
+        <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+
+        <style>
+            html, body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #renderCanvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }
+        </style>
+    </head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+    <script>
+        var canvas = document.getElementById("renderCanvas");
+        var pointerMoving = 0
+        var sphereMass = 0
+        var engine = null;
+        var scene = null;
+        var sceneToRender = null;
+        var drawing = true
+        var drawingRope = false
+        var drawingCylinder = false
+        var drawingSphere = false
+        var isDragging = false
+        var startingPointBeforeNull = 0
+        var storeDrawings =[]
+        var redSphere
+        var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
+        var createScene = function () {
+            var scene = new BABYLON.Scene(engine);
+            
+            scene.enablePhysics(new BABYLON.Vector3(0,-9.81, 0), new BABYLON.AmmoJSPlugin());
+            var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
+
+  
+
+            camera.setPosition(new BABYLON.Vector3(20, 200, 400));
+        
+            camera.lowerBetaLimit = 0.1;
+            camera.upperBetaLimit = (Math.PI / 2) * 0.99;
+            camera.lowerRadiusLimit = 150;
+        
+            scene.clearColor = new BABYLON.Color3(0, 0, 0);
+        
+            // Light
+            var light = new BABYLON.PointLight("omni", new BABYLON.Vector3(0, 50, 0), scene);
+        
+            // Ground
+            var ground = BABYLON.Mesh.CreateGround("ground", 1000, 1000, 1, scene, false);
+            var groundMaterial = new BABYLON.StandardMaterial("ground", scene);
+            groundMaterial.specularColor = BABYLON.Color3.Black();
+            ground.material = groundMaterial;
+            ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.MeshImpostor, {mass: 0, friction: 0, restitution: 0.3});
+        
+        var linesed = [];
+        	linesed[0] = new BABYLON.Vector3(1, 10, 0);
+         
+        	var i = 0;
+        	var lines;
+            var DrawingLines;
+            var wholeLine;
+            // Meshes
+
+        
+            var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+
+          var cylinderButton = BABYLON.GUI.Button.CreateSimpleButton("but", "Click Me if drawing cylinder");
+                cylinderButton.width = 0.2;
+                cylinderButton.height = "40px";
+                cylinderButton.color = "white";
+                cylinderButton.left = 0
+                cylinderButton.top = -350
+                cylinderButton.background = "green";
+
+
+
+         cylinderButton.onPointerClickObservable.add(function () {
+
+            redSphere = BABYLON.Mesh.CreateSphere("red", 1, 20, scene);
+            var redMat = new BABYLON.StandardMaterial("ground", scene);
+            redMat.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+            redMat.specularColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+            redMat.emissiveColor = BABYLON.Color3.Red();
+            redSphere.material = redMat;
+            redSphere.position.y = 10;
+            redSphere.position.x -= 0;
+            redSphere.position.z = 0;
+            drawingSphere = false
+            drawingRope = false
+            drawingCylinder = true
+        });
+
+          var ropeButton = BABYLON.GUI.Button.CreateSimpleButton("but", "Click Me if drawing rope");
+                ropeButton.width = 0.2;
+                ropeButton.height = "40px";
+                ropeButton.color = "white";
+                ropeButton.left = 370
+                ropeButton.top = -350
+                ropeButton.background = "green";
+
+
+
+         ropeButton.onPointerClickObservable.add(function () {
+
+            redSphere = BABYLON.Mesh.CreateSphere("red", 1, 20, scene);
+            var redMat = new BABYLON.StandardMaterial("ground", scene);
+            redMat.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+            redMat.specularColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+            redMat.emissiveColor = BABYLON.Color3.Red();
+            redSphere.material = redMat;
+            redSphere.position.y = 150;
+            redSphere.position.x -= 0;
+            redSphere.position.z = 100;
+            drawingSphere = false
+            drawingRope = true
+            drawingCylinder = false
+        });
+
+
+                var sphereButton = BABYLON.GUI.Button.CreateSimpleButton("but", "Click Me if drawing sphere");
+                sphereButton.width = 0.2;
+                sphereButton.height = "40px";
+                sphereButton.color = "white";
+                sphereButton.left = -370
+                sphereButton.top = -350
+                sphereButton.background = "green";
+
+
+
+         sphereButton.onPointerClickObservable.add(function () {
+            redSphere = BABYLON.Mesh.CreateSphere("red", 1, 20, scene);
+            var redMat = new BABYLON.StandardMaterial("ground", scene);
+            redMat.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+            redMat.specularColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+            redMat.emissiveColor = BABYLON.Color3.Red();
+            redSphere.material = redMat;
+            redSphere.position.y = 150;
+            redSphere.position.x -= 0;
+            redSphere.position.z = 100;
+            drawingSphere = true
+            drawingRope = false
+            drawingCylinder = false
+        });
+            advancedTexture.addControl(ropeButton);
+            advancedTexture.addControl(sphereButton);
+            advancedTexture.addControl(cylinderButton)
+            // Events
+            var canvas = engine.getRenderingCanvas();
+            var startingPoint;
+            var currentMesh;
+        
+            var getGroundPosition = function () {
+                // Use a predicate to get position on the ground
+                var pickinfo = scene.pick(scene.pointerX, scene.pointerY);
+                if (pickinfo.hit) {
+                    console.log("lol")
+                    return pickinfo.pickedPoint;
+                }
+        
+                return null;
+            }
+        
+            var onPointerClickObservable = function (evt)
+            {
+                console.log("button clicked!")
+            }
+            var onPointerDown = function (evt) {
+                if (evt.button !== 0 && (drawingSphere || drawingRope || drawingCylinder)) {
+                    return;
+                }
+        
+                // check if we are under a mesh
+                var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== ground; });
+                if (pickInfo.hit ) {
+                    currentMesh = pickInfo.pickedMesh;
+                    startingPoint = getGroundPosition(evt);
+        
+                    if (startingPoint) { // we need to disconnect camera from canvas
+                        setTimeout(function () {
+                            camera.detachControl(canvas);
+                        }, 0);
+                    }
+                }
+            }
+        
+            var onPointerUp = function (evt) {
+                lines = DrawingLines
+                console.log(linesed)
+
+                console.log(startingPoint)
+
+                    
+
+                    if(drawingCylinder && startingPoint)
+                    {
+                        distance =  BABYLON.Vector3.Distance(linesed[0],linesed[linesed.length-1])
+
+                     for (i = 0; i < storeDrawings.length; i++)
+                    {
+                        storeDrawings[i].dispose()
+                    }
+                    diameterCalc = pointerMoving/(5*3.14)
+
+                     const cylinder = BABYLON.MeshBuilder.CreateCylinder("cylinder", {height:32, diameterTop: 32, diameterBottom: 32});
+
+                    cylinder.color = BABYLON.Color3.Blue();
+
+                    let pointerDragBehaviorCylinder = new BABYLON.PointerDragBehavior()
+                    pointerDragBehaviorCylinder.onDragStartObservable.add((event) => {
+                      console.log("here")
+                      isDragging = true
+                      console.log("here")
+                    })
+                    pointerDragBehaviorCylinder.onDragEndObservable.add((event) => {
+
+                         cylinder.physicsImpostor = new BABYLON.PhysicsImpostor(
+                              cylinder,
+                              BABYLON.PhysicsImpostor.CylinderImpostor,
+                              { mass: 3, restitution: 0.9, velocityIterations: 20 },
+                              scene
+                            )
+                      isDragging = false
+                    })
+                    cylinder.addBehavior(pointerDragBehaviorCylinder)
+                    cylinder.position = new BABYLON.Vector3(linesed[linesed.length-1].x,-12,0)
+
+                    linesed = [];
+                     i = 0;
+                    startingPoint = null;
+                    drawingSphere = false
+                    drawingRope = false
+                    drawingCylinder= false
+                    redSphere.dispose() 
+                    }
+
+                if (drawingSphere && startingPoint)
+                {
+
+                    distance =  BABYLON.Vector3.Distance(linesed[0],linesed[linesed.length-1])
+                    if(distance < 2.0)
+                        {
+                            diameterCalc = pointerMoving/(5*3.14)
+                            console.log(diameterCalc)
+                            pointerMoving = 0
+                            let sphere = BABYLON.MeshBuilder.CreateSphere(
+                              'sphere',
+                              { diameter: Math.ceil(diameterCalc), segments: 32 },
+                              scene
+                            )
+                            sphere.position = linesed[linesed.length-1]
+                            //sphere.visibility = 0.01
+
+                            var drawingSphereButton = BABYLON.GUI.Button.CreateSimpleButton("but", "Click Me to drop");
+                            drawingSphereButton.width = 0.1;
+                            drawingSphereButton.height = "40px";
+                            drawingSphereButton.color = "white";
+                            drawingSphereButton.left = (linesed[linesed.length-1].x ) * -1
+                            drawingSphereButton.top = (linesed[linesed.length-1].y) * -1
+                            drawingSphereButton.background = "green";
+
+                            drawingSphereButton.onPointerClickObservable.add(function () {
+
+
+                            let pointerDragBehavior = new BABYLON.PointerDragBehavior()
+                            pointerDragBehavior.onDragStartObservable.add((event) => {
+                              console.log("here")
+                              isDragging = true
+                              console.log("here")
+                            })
+                            pointerDragBehavior.onDragEndObservable.add((event) => {
+                              isDragging = false
+                            })
+                            sphere.addBehavior(pointerDragBehavior)
+                            sphere.physicsImpostor = new BABYLON.PhysicsImpostor(
+                              sphere,
+                              BABYLON.PhysicsImpostor.SphereImpostor,
+                              { mass: 3, restitution: 0.9, velocityIterations: 20 },
+                              scene
+                            )
+    
+
+                        });
+
+                            drawingSphereButton.onPointerUpObservable.add( function()
+                            {
+                                advancedTexture.removeControl(drawingSphereButton)
+                            })
+                            advancedTexture.addControl(drawingSphereButton);
+
+                        }
+                console.log(distance)
+
+                for (i = 0; i < storeDrawings.length; i++)
+                {
+                    storeDrawings[i].dispose()
+                }
+
+                //lines =BABYLON.Mesh.CreateLines("lines", linesed, scene);
+
+                   //                  var plane = BABYLON.MeshBuilder.CreateGround("plane", {width: 100, height: 12, subdivisions: 25 }, scene);
+                   //  plane.position = linesed[linesed.length-1];
+                   //  plane.color = "white"
+                   // plane.physicsImpostor =  new BABYLON.PhysicsImpostor(plane, BABYLON.PhysicsImpostor.ClothImpostor, { mass: 0, friction: 0.1, restitution: 0, fixedPoints:15, margin: 0.35}, scene);
+                   //  plane.physicsImpostor.pressure =  60;
+                   //  plane.physicsImpostor.velocityIterations = 10; 
+                   //  plane.physicsImpostor.positionIterations = 10;
+                   //  plane.physicsImpostor.stiffness = 1;
+                   //  plane.rotation = new BABYLON.Vector3(0, 0, 90);
+
+                        linesed = [];
+                            i = 0;
+                    //camera.attachControl(canvas, true);
+                    startingPoint = null;
+                    drawingSphere = false
+                    drawingRope = false
+                    drawingCylinder = false
+                    
+
+
+                    redSphere.dispose() 
+                }
+                
+                if (startingPoint && drawingRope) {
+
+                for (i = 0; i < storeDrawings.length; i++)
+                {
+                    storeDrawings[i].dispose()
+                }
+                            	lines =BABYLON.Mesh.CreateLines("lines", linesed, scene);
+                            
+                                // newLine = BABYLON.Mesh.CreateLines("lines", [startingPoint, linesed[linesed.length-1]], scene);
+            lines.physicsImpostor = new BABYLON.PhysicsImpostor(lines, BABYLON.PhysicsImpostor.RopeImpostor, {mass:3, fixedPoints: 0}, scene);
+            lines.physicsImpostor.velocityIterations = 20; 
+            lines.physicsImpostor.positionIterations = 20;
+            lines.physicsImpostor.stiffness = 0.1;	
+            console.log("made t here")
+    sphere1 = addSphereHandle(linesed[0])
+    sphere2 =addSphereHandle(linesed[linesed.length-1])	
+
+        lines.physicsImpostor.addHook(sphere1.physicsImpostor, 0, 1, true)
+    lines.physicsImpostor.addHook(sphere2.physicsImpostor, 1, 1, true)
+                			linesed = [];
+                			i = 0;
+                    //camera.attachControl(canvas, true);
+                    startingPoint = null;
+                    drawingSphere = false
+                    drawingRope = false
+                    drawingCylinder= false
+                    redSphere.dispose() 
+
+
+
+    
+scene.onKeyboardObservable.add((kbInfo) => {
+  switch (kbInfo.type) {
+    case BABYLON.KeyboardEventTypes.KEYDOWN:
+      console.log("KEY DOWN: ", kbInfo.event.key);
+      //increase mass of sphere
+      if(kbInfo.event.key == 'u')
+      {
+              sphere1.physicsImpostor.setMass(sphereMass+0.01)
+              lines.physicsImpostor.addHook(sphere1.physicsImpostor, 0, 1, true)
+      }
+
+      break;
+    // case BABYLON.KeyboardEventTypes.KEYUP:
+    //   console.log("KEY UP: ", kbInfo.event.code);
+    //   break;
+  }
+});
+
+
+
+
+                    //lines.dispose()
+                    return;
+                }
+            }
+        
+                function addSphereHandle(position) {
+        console.log(position)
+        console.log("made t sdshere")
+    let sphere = BABYLON.MeshBuilder.CreateSphere(
+      'sphere',
+      { diameter: 10, segments: 32 },
+      scene
+    )
+    sphere.position = position
+    //sphere.visibility = 0.01
+    let pointerDragBehavior = new BABYLON.PointerDragBehavior()
+    pointerDragBehavior.onDragStartObservable.add((event) => {
+      console.log("here")
+      isDragging = true
+      console.log("here")
+    })
+    pointerDragBehavior.onDragEndObservable.add((event) => {
+      isDragging = false
+    })
+    sphere.addBehavior(pointerDragBehavior)
+    sphere.physicsImpostor = new BABYLON.PhysicsImpostor(
+      sphere,
+      BABYLON.PhysicsImpostor.SphereImpostor,
+      { mass: 0, restitution: 0.9 },
+      scene
+    )
+    return sphere
+  }
+            var onPointerMove = function (evt) {
+                pointerMoving++
+            if(drawingSphere || drawingRope || drawingCylinder){
+                if(drawing){
+                if (!startingPoint) {
+                    return;
+                }
+        
+                var current = getGroundPosition(evt);
+        
+                if (!current) {
+                    return;
+                }
+        
+                var diff = current.subtract(startingPoint);
+                currentMesh.position.addInPlace(diff);
+        DrawingLines =BABYLON.Mesh.CreateLines("lines", linesed, scene);
+        DrawingLines.color = BABYLON.Color3.Blue();
+        storeDrawings.push(DrawingLines)
+            // lines.physicsImpostor = new BABYLON.PhysicsImpostor(lines, BABYLON.PhysicsImpostor.RopeImpostor, {fixedPoints: 3}, scene);
+            // lines.physicsImpostor.velocityIterations = 20; 
+            // lines.physicsImpostor.positionIterations = 20;
+            // lines.physicsImpostor.stiffness = 0.8; 
+        linesed[i] = new BABYLON.Vector3(currentMesh.position.x,currentMesh.position.y, 10);	
+            
+
+            }
+                            i++;
+                startingPoint = current;
+                startingPointBeforeNull = startingPoint
+            }
+            }
+        
+            canvas.addEventListener("pointerdown", onPointerDown, false);
+            canvas.addEventListener("pointerup", onPointerUp, false);
+            canvas.addEventListener("pointermove", onPointerMove, false);
+            canvas.addEventListener("pointerclick", onPointerClickObservable, false);
+
+        
+            scene.onDispose = function () {
+                canvas.removeEventListener("pointerdown", onPointerDown);
+                canvas.removeEventListener("pointerup", onPointerUp);
+                canvas.removeEventListener("pointermove", onPointerMove);
+                canvas.removeEventListener("pointerclick", onPointerClickObservable, false);
+            }
+        
+
+            return scene;
+        };
+                window.initFunction = async function() {
+                    await Ammo();
+                    
+                    var asyncEngineCreation = async function() {
+                        try {
+                        return createDefaultEngine();
+                        } catch(e) {
+                        console.log("the available createEngine function failed. Creating the default engine instead");
+                        return createDefaultEngine();
+                        }
+                    }
+
+
+              window.engine = await asyncEngineCreation();
+        if (!engine) throw 'engine should not be null.';
+        window.scene = createScene();
+ const xr = await scene.createDefaultXRExperienceAsync({
+    // ask for an ar-session
+    uiOptions: {
+      sessionMode: "immersive-ar",
+      referenceSpaceType: "local-floor"
+    },
+  });
+       
+    };
+
+
+        initFunction().then(() => {sceneToRender = scene        
+            engine.runRenderLoop(function () {
+                if (sceneToRender && sceneToRender.activeCamera) {
+                    sceneToRender.render();
+                }
+            });
+
+
+        });
+
+        // Resize
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+    </script>
+</body>
+</html>
