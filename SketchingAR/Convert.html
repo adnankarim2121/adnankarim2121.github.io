@@ -1,6 +1,7 @@
 <html>
 <head>
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://preview.babylonjs.com/ammo.js"></script>
     <style>
         body,#renderCanvas { width: 100%; height: 100%;}
     </style>
@@ -55,7 +56,12 @@
                 return scene;
             });
         };
+        async function start()
+        {
+             await Ammo();
+        }
 
+        start();
         createScene().then(sceneToRender => {
             engine.runRenderLoop(() => sceneToRender.render());
         });
