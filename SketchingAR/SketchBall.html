@@ -74,7 +74,7 @@
             var light = new BABYLON.PointLight("omni", new BABYLON.Vector3(0, 50, 0), scene);
         
             // Ground
-            var ground = BABYLON.Mesh.CreateGround("ground", 1000, 1000, 1, scene, false);
+            var ground = BABYLON.Mesh.CreateGround("ground", 4, 4, 1, scene, false);
             var groundMaterial = new BABYLON.StandardMaterial("ground", scene);
             groundMaterial.specularColor = BABYLON.Color3.Black();
             ground.material = groundMaterial;
