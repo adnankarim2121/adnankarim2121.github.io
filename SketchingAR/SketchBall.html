@@ -481,7 +481,13 @@ scene.onKeyboardObservable.add((kbInfo) => {
             }
         
 
-            return scene;
+const xrPromise = scene.createDefaultXRExperienceAsync({
+    floorMeshes: [ground]
+});
+return xrPromise.then((xrExperience) => {
+    console.log("Done, WebXR is enabled.");
+    return scene;
+});
         };
                 window.initFunction = async function() {
                     await Ammo();
@@ -499,13 +505,13 @@ scene.onKeyboardObservable.add((kbInfo) => {
               window.engine = await asyncEngineCreation();
         if (!engine) throw 'engine should not be null.';
         window.scene = createScene();
- const xr = await scene.createDefaultXRExperienceAsync({
-    // ask for an ar-session
-    uiOptions: {
-      sessionMode: "immersive-ar",
-      referenceSpaceType: "local-floor"
-    },
-  });
+ // const xr = await scene.createDefaultXRExperienceAsync({
+ //    // ask for an ar-session
+ //    uiOptions: {
+ //      sessionMode: "immersive-ar",
+ //      referenceSpaceType: "local-floor"
+ //    },
+ //  });
        
     };
 
