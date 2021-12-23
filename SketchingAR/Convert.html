@@ -56,7 +56,7 @@ var createScene = async function () {
     light.intensity = 0.7;
     var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
     sphere.position.y = 2;
-    sphere.position.z = -8;
+    sphere.position.z = 1;
 
     const xr = await scene.createDefaultXRExperienceAsync({
         uiOptions: {
