@@ -58,7 +58,7 @@
             var scene = new BABYLON.Scene(engine);
             
             scene.enablePhysics(new BABYLON.Vector3(0,-9.81, 0), new BABYLON.AmmoJSPlugin());
-            var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
+            var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI/4, Math.PI/3, 8, new BABYLON.Vector3(0, 0, 0), scene);
 
   
 
@@ -481,13 +481,7 @@ scene.onKeyboardObservable.add((kbInfo) => {
             }
         
 
-const xrPromise = scene.createDefaultXRExperienceAsync({
-    floorMeshes: [ground]
-});
-return xrPromise.then((xrExperience) => {
-    console.log("Done, WebXR is enabled.");
-    return scene;
-});
+            return scene;
         };
                 window.initFunction = async function() {
                     await Ammo();
@@ -505,13 +499,13 @@ return xrPromise.then((xrExperience) => {
               window.engine = await asyncEngineCreation();
         if (!engine) throw 'engine should not be null.';
         window.scene = createScene();
- // const xr = await scene.createDefaultXRExperienceAsync({
- //    // ask for an ar-session
- //    uiOptions: {
- //      sessionMode: "immersive-ar",
- //      referenceSpaceType: "local-floor"
- //    },
- //  });
+ const xr = await scene.createDefaultXRExperienceAsync({
+    // ask for an ar-session
+    uiOptions: {
+      sessionMode: "immersive-ar",
+      referenceSpaceType: "local-floor"
+    },
+  });
        
     };
 
