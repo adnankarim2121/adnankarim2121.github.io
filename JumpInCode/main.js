@@ -191,9 +191,15 @@ $(canvasElementDrawing).on('mousemove', function(e) {
             canvasDrawingCtx.globalCompositeOperation = 'source-over';
             canvasDrawingCtx.strokeStyle = colorChoice.value;
             canvasDrawingCtx.lineWidth = 3;
+            if(colorChoice.value == "highlight")
+            {
+              console.log("in here")
+              canvasDrawingCtx.strokeStyle = 'rgba(255, 255, 0, 0.1)'
+              canvasDrawingCtx.lineWidth = 30;
+            }
         } else {
             canvasDrawingCtx.globalCompositeOperation = 'destination-out';
-            canvasDrawingCtx.lineWidth = 10;
+            canvasDrawingCtx.lineWidth = 50;
         }
         canvasDrawingCtx.moveTo(last_mousex,last_mousey);
         canvasDrawingCtx.lineTo(mousex,mousey);
