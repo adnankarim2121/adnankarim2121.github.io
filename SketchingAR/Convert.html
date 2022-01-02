@@ -16,7 +16,7 @@
 
         const createScene = function() {
             const scene = new BABYLON.Scene(engine);
-            scene.enablePhysics(new BABYLON.Vector3(0,-9.81, 0), physics);
+            scene.enablePhysics(new BABYLON.Vector3(0,-9.81, 0), new BABYLON.AmmoJSPlugin());
             scene.clearColor = new BABYLON.Color3.Black;
 
             const alpha =  Math.PI/4;
@@ -36,6 +36,19 @@
             const boxMaterial = new BABYLON.StandardMaterial("material", scene);
             boxMaterial.diffuseColor = BABYLON.Color3.Random();
             box.material = boxMaterial;
+
+            var nbPoints = 30;
+            myPoints = [];
+            for (var i = 0; i<nbPoints; i++) {
+                myPoints.push(new BABYLON.Vector3(-20, 15, 0), new BABYLON.Vector3(20 + 10 * i / nbPoints, 15, 0));        
+            }
+            var rope = BABYLON.MeshBuilder.CreateLines("lines", {points: myPoints}, scene); 
+            rope.color = BABYLON.Color3.Black();
+                
+            rope.physicsImpostor = new BABYLON.PhysicsImpostor(rope, BABYLON.PhysicsImpostor.RopeImpostor, {mass: 2}, scene);
+            rope.physicsImpostor.velocityIterations = 20; 
+            rope.physicsImpostor.positionIterations = 20;
+            rope.physicsImpostor.stiffness = 0.8;
 
             box.actionManager = new BABYLON.ActionManager(scene);
             box.actionManager.registerAction(

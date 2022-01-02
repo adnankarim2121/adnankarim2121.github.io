@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+
+<style type="text/css">
+	#videoElement
+{
+    transform: rotateY(180deg);
+    -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+    -moz-transform:rotateY(180deg); /* Firefox */
+}
+
+
+</style>
+<body>
+	
+
+  <div style="overflow: scroll;" class="container">
+    <video class="input_video" id="videoElement" hidden></video>
+    <canvas class="output_canvas" width="1280px" height="720px"></canvas>
+    <img id="uploadImage" width="220" height="277"  alt="The Scream" hidden>
+
+        <label for="image_input" class="custom-file-upload">
+    Upload Screenshot of Code (Or any image really):
+</label>
+          <input type="file" id="image_input" accept="image/*">
+      <div id="display_image"></div>
+  </div>
+  <div class="control-panel">
+</body>
+</html>
+<script type="module">
+const videoElement = document.getElementsByClassName('input_video')[0];
+const canvasElement = document.getElementsByClassName('output_canvas')[0];
+const canvasCtx = canvasElement.getContext('2d');
+const background = document.getElementById("uploadImage");
+let i = 0
+let temp = 0
+let previousHorizontalPosition = 0
+let previousVerticalPosition = 0
+let keyPressedHorizonal = false
+let keyPressedVertical = false
+
+
+const image_input = document.querySelector("#image_input");
+image_input.addEventListener("change", function() {
+   const reader = new FileReader();
+   reader.addEventListener("load", () => {
+   const uploaded_image = reader.result;
+   console.log(uploaded_image)
+   background.src = uploaded_image
+   //document.querySelector("#display_image").style.backgroundImage = `url(${uploaded_image})`;
+});
+   reader.readAsDataURL(this.files[0]);
+});
+
+
+document.addEventListener("keydown", function(event) {
+  console.log(event.which);
+  if(event.which == 68 || event.which == 65)
+  {
+  	keyPressedHorizonal = true
+  	updateHorizontalPosition(event.which)
+  }
+
+    if(event.which == 87 || event.which == 83)
+  {
+  	keyPressedVertical = true
+  	updateVerticalPosition(event.which)
+  }
+
+})
+
+function updateHorizontalPosition(keycode)
+{
+	if (i == 0)
+	{
+	 i++
+	 return previousHorizontalPosition				
+	}
+
+	//right
+	if(keycode == 68 && keyPressedHorizonal)
+	{
+		previousHorizontalPosition = previousHorizontalPosition +5
+		keyPressedHorizonal = false
+	}
+
+	//left
+	if(keycode == 65 && keyPressedHorizonal)
+	{
+		previousHorizontalPosition = previousHorizontalPosition - 5
+		keyPressedHorizonal = false
+	}
+
+	return previousHorizontalPosition
+}
+
+function updateVerticalPosition(keycode)
+{
+	if (i == 0)
+	{
+	 i++
+	 return previousVerticalPosition				
+	}
+
+	//up
+	if(keycode == 87 && keyPressedVertical)
+	{
+		previousVerticalPosition = previousVerticalPosition -5
+		keyPressedVertical = false
+	}
+
+	//down
+	if(keycode == 83 && keyPressedVertical)
+	{
+		previousVerticalPosition = previousVerticalPosition + 5
+		keyPressedVertical = false
+	}
+
+	return previousVerticalPosition
+
+}
+function onResults(results) {
+
+canvasElement.addEventListener('click', function() { 
+
+}, false);
+  canvasCtx.save();
+  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  let width = updateHorizontalPosition()
+  let height = updateVerticalPosition()
+  //this handles the segmentation mask
+  canvasCtx.drawImage(results.segmentationMask, width, height,
+                      canvasElement.width-600, canvasElement.height-500);
+
+
+
+  // Only overwrite existing pixels.
+  canvasCtx.globalCompositeOperation = 'source-in';
+  canvasCtx.fillStyle = '#00FF00';
+  canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+
+  // Only overwrite missing pixels.
+
+  //this handles the actual image/stream
+  canvasCtx.drawImage(
+      results.image, width, height, canvasElement.width-600, canvasElement.height-500);
+
+    canvasCtx.globalCompositeOperation = 'destination-atop';
+    canvasCtx.drawImage(
+      background, 0, 0, canvasElement.width, canvasElement.height);
+
+  canvasCtx.restore();
+}
+
+
+const selfieSegmentation = new SelfieSegmentation({locateFile: (file) => {
+  return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
+}});
+selfieSegmentation.setOptions({
+  modelSelection: 1,
+  selfieMode: true,
+});
+selfieSegmentation.onResults(onResults);
+
+
+
+
+
+const camera = new Camera(videoElement, {
+  onFrame: async () => {
+    await selfieSegmentation.send({image: videoElement});
+    
+  },
+  width: 1280,
+  height: 720
+});
+camera.start();
+</script>
