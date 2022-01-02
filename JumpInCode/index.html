@@ -24,7 +24,9 @@
 
   <div style="overflow: scroll;" class="container">
     <video class="input_video" id="videoElement" hidden></video>
-    <canvas class="output_canvas" width="1280px" height="720px"></canvas>
+    <canvas class="output_canvas" width="1280px" height="720px" style="z-index: 0;"></canvas>
+     <canvas id="layer2" width="1280px" height="720px" 
+   style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
     <img id="uploadImage" width="220" height="277"  alt="The Scream" hidden>
 
         <label for="image_input" class="custom-file-upload">
@@ -39,7 +41,10 @@
 <script type="module">
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
+const canvasElementDrawing = document.getElementById('layer2');
 const canvasCtx = canvasElement.getContext('2d');
+const canvasDrawingCtx = canvasElementDrawing.getContext('2d');
+
 const background = document.getElementById("uploadImage");
 let i = 0
 let temp = 0
@@ -184,4 +189,43 @@ const camera = new Camera(videoElement, {
   height: 720
 });
 camera.start();
+
+//drawing
+
+// last known position
+var pos = { x: 0, y: 0 };
+
+window.addEventListener('resize', resize);
+document.addEventListener('mousemove', draw);
+document.addEventListener('mousedown', setPosition);
+document.addEventListener('mouseenter', setPosition);
+
+// new position from mouse event
+function setPosition(e) {
+  pos.x = e.clientX;
+  pos.y = e.clientY;
+}
+
+// resize canvas
+function resize() {
+  canvasDrawingCtx.canvas.width = window.innerWidth;
+  canvasDrawingCtx.canvas.height = window.innerHeight;
+}
+
+function draw(e) {
+  // mouse left button must be pressed
+  if (e.buttons !== 1) return;
+
+  canvasDrawingCtx.beginPath(); // begin
+
+  canvasDrawingCtx.lineWidth = 5;
+  canvasDrawingCtx.lineCap = 'round';
+  canvasDrawingCtx.strokeStyle = '#c0392b';
+
+  canvasDrawingCtx.moveTo(pos.x, pos.y); // from
+  setPosition(e);
+  canvasDrawingCtx.lineTo(pos.x, pos.y); // to
+
+  canvasDrawingCtx.stroke(); // draw it!
+}
 </script>
