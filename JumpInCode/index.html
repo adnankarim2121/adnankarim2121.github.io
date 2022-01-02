@@ -37,6 +37,13 @@
       <div id="display_image"></div>
       <input type="button" id="drawTool" value="draw"  />
 <input type="button" id="eraseTool" value="erase" />
+<label for="penChoiceColor">Choose a color:</label>
+  <select name="penChoiceColor" id="penColor">
+    <option value="black">Black</option>
+    <option value="red">Red</option>
+    <option value="green">Green</option>
+    <option value="blue">Blue</option>
+  </select>
   </div>
   <div class="control-panel">
 </body>
@@ -201,6 +208,7 @@ camera.start();
   const canvasElementDrawing = document.getElementById('layer2');
   const drawButton = document.getElementById('drawTool');
   const eraseButton = document.getElementById('eraseTool');
+  const colorChoice = document.getElementById('penColor')
   drawButton.setAttribute("onclick","use_tool('draw');");
   eraseButton.setAttribute("onclick","use_tool('erase');");
   const canvasDrawingCtx = canvasElementDrawing.getContext('2d');
@@ -212,6 +220,7 @@ var mousex = 0;
 var mousey = 0;
 var mousedown = false;
 var tooltype = 'erase';
+var penColor = 'black';
 
 //Mousedown
 $(canvasElementDrawing).on('mousedown', function(e) {
@@ -233,7 +242,7 @@ $(canvasElementDrawing).on('mousemove', function(e) {
         canvasDrawingCtx.beginPath();
         if(tooltype=='draw') {
             canvasDrawingCtx.globalCompositeOperation = 'source-over';
-            canvasDrawingCtx.strokeStyle = 'black';
+            canvasDrawingCtx.strokeStyle = colorChoice.value;
             canvasDrawingCtx.lineWidth = 3;
         } else {
             canvasDrawingCtx.globalCompositeOperation = 'destination-out';
@@ -255,4 +264,9 @@ $(canvasElementDrawing).on('mousemove', function(e) {
 use_tool = function(tool) {
     tooltype = tool; //update
 } 
+
+select_color = function(value)
+{
+  penColor = value;
+}
 </script>
