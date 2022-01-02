@@ -10,7 +10,7 @@
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
    <script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
    <script src="src/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
-   <script src="src/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
+   <script id="editorLanguage" src="src/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
 <!--    <script type="text/javascript" src="readFile.js"></script> -->
 </head>
 
@@ -33,18 +33,20 @@
 
   <div style="overflow: scroll;" class="container">
     <video class="input_video" id="videoElement" hidden></video>
-    <div id="editor" style="z-index: -1;">some text</div>
+    <div id="editor" style="z-index: -1;"></div>
     <canvas id = "layer1" class="output_canvas" width="1280px" height="720px" style="z-index: 1;"></canvas>
     
      <canvas id="layer2" width="1280px" height="720px" 
    style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>
-    <img id="uploadImage" width="220" height="277"  alt="The Scream" hidden>
+<!--     <img id="uploadImage" width="220" height="277"  alt="The Scream" hidden>
 
         <label for="image_input" class="custom-file-upload">
     Upload Screenshot of Code (Or any image really):
-</label>
-          <input type="file" id="image_input" accept="image/*">
-      <div id="display_image"></div>
+</label> -->
+<!--           <input type="file" id="image_input" accept="image/*">
+      <div id="display_image"></div> -->
+
+
       <input type="button" id="drawTool" value="draw"  />
 <input type="button" id="eraseTool" value="erase" />
 <label for="penChoiceColor">Choose a color:</label>
@@ -61,6 +63,15 @@
   <select name="chooseMode" id="modeType">
     <option value="drawing">Drawing</option>
     <option value="editor">Editor</option>
+  </select>
+
+
+    <label for="editorLanguage">Choose language:</label>
+  <select name="chooseMode" id="editorLanguageSelect">
+    <option value="javascript">JavaScript</option>
+    <option value="python">Python</option>
+    <option value="cpp">C++</option>
+    <option value="java">Java</option>
   </select>
 
   </div>

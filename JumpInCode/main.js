@@ -1,16 +1,13 @@
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.session.setMode("ace/mode/javascript");
-//editor.session.setMode(new JavaScriptMode());
-//editor.setReadOnly(false);
-editor.insert("hello")
+var editor = ace.edit("editor");
+editor.setTheme("ace/theme/monokai");
+editor.session.setMode("ace/mode/javascript");
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
 
 const canvasCtx = canvasElement.getContext('2d');
 
 
-const background = document.getElementById("uploadImage");
+// const background = document.getElementById("uploadImage");
 let i = 0
 let temp = 0
 let previousHorizontalPosition = 0
@@ -19,17 +16,17 @@ let keyPressedHorizonal = false
 let keyPressedVertical = false
 
 
-const image_input = document.querySelector("#image_input");
-image_input.addEventListener("change", function() {
-   const reader = new FileReader();
-   reader.addEventListener("load", () => {
-   const uploaded_image = reader.result;
-   console.log(uploaded_image)
-   background.src = uploaded_image
-   //document.querySelector("#display_image").style.backgroundImage = `url(${uploaded_image})`;
-});
-   reader.readAsDataURL(this.files[0]);
-});
+// const image_input = document.querySelector("#image_input");
+// image_input.addEventListener("change", function() {
+//    const reader = new FileReader();
+//    reader.addEventListener("load", () => {
+//    const uploaded_image = reader.result;
+//    console.log(uploaded_image)
+//    background.src = uploaded_image
+//    //document.querySelector("#display_image").style.backgroundImage = `url(${uploaded_image})`;
+// });
+//    reader.readAsDataURL(this.files[0]);
+// });
 
 
 document.addEventListener("keydown", function(event) {
@@ -109,6 +106,9 @@ if(modeType.value == "drawing")
   document.getElementById("layer1").style.zIndex = "1";
   document.getElementById("layer2").style.zIndex = "2";
   document.getElementById("editor").style.zIndex = "-1";
+
+  document.getElementById("drawTool").style.display = 'block';
+  document.getElementById("eraseTool").style.display = 'block';
 }
 
 if(modeType.value == "editor")
@@ -117,7 +117,33 @@ if(modeType.value == "editor")
   document.getElementById("layer1").style.zIndex = "-1";
   document.getElementById("layer2").style.zIndex = "1";
   document.getElementById("editor").style.zIndex = "2";
+
+  document.getElementById("drawTool").style.display = 'none';
+  document.getElementById("eraseTool").style.display = 'none';
 }
+
+//language selection
+const languageType = document.getElementById('editorLanguageSelect')
+if(editorLanguageSelect.value == "javascript")
+{
+  editor.session.setMode("ace/mode/javascript");
+}
+
+if(editorLanguageSelect.value == "python")
+{
+  editor.session.setMode("ace/mode/python");
+}
+
+if(editorLanguageSelect.value == "cpp")
+{
+  editor.session.setMode("ace/mode/c_cpp");
+}
+
+if(editorLanguageSelect.value == "java")
+{
+  editor.session.setMode("ace/mode/java");
+}
+
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   let width = updateHorizontalPosition()
@@ -140,8 +166,8 @@ if(modeType.value == "editor")
       results.image, width, height, canvasElement.width-600, canvasElement.height-500);
 
     canvasCtx.globalCompositeOperation = 'destination-atop';
-    canvasCtx.drawImage(
-      background, 0, 0, canvasElement.width, canvasElement.height);
+    // canvasCtx.drawImage(
+    //   background, 0, 0, canvasElement.width, canvasElement.height);
 
   canvasCtx.restore();
 }
