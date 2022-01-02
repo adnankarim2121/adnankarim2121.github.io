@@ -7,6 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <style type="text/css">
@@ -34,6 +35,8 @@
 </label>
           <input type="file" id="image_input" accept="image/*">
       <div id="display_image"></div>
+      <input type="button" id="drawTool" value="draw"  />
+<input type="button" id="eraseTool" value="erase" />
   </div>
   <div class="control-panel">
 </body>
@@ -190,42 +193,66 @@ const camera = new Camera(videoElement, {
 });
 camera.start();
 
-//drawing
 
-// last known position
-var pos = { x: 0, y: 0 };
+</script>
 
-window.addEventListener('resize', resize);
-document.addEventListener('mousemove', draw);
-document.addEventListener('mousedown', setPosition);
-document.addEventListener('mouseenter', setPosition);
+<script type="text/javascript">
 
-// new position from mouse event
-function setPosition(e) {
-  pos.x = e.clientX;
-  pos.y = e.clientY;
-}
+  const canvasElementDrawing = document.getElementById('layer2');
+  const drawButton = document.getElementById('drawTool');
+  const eraseButton = document.getElementById('eraseTool');
+  drawButton.setAttribute("onclick","use_tool('draw');");
+  eraseButton.setAttribute("onclick","use_tool('erase');");
+  const canvasDrawingCtx = canvasElementDrawing.getContext('2d');
+ var canvasx = $(canvasElementDrawing).offset().left;
+var canvasy = $(canvasElementDrawing).offset().top;
+var last_mousex = 0;
+var last_mousey = 0;
+var mousex = 0;
+var mousey = 0;
+var mousedown = false;
+var tooltype = 'erase';
 
-// resize canvas
-function resize() {
-  canvasDrawingCtx.canvas.width = window.innerWidth;
-  canvasDrawingCtx.canvas.height = window.innerHeight;
-}
+//Mousedown
+$(canvasElementDrawing).on('mousedown', function(e) {
+    last_mousex = mousex = parseInt(e.clientX-canvasx);
+  last_mousey = mousey = parseInt(e.clientY-canvasy);
+    mousedown = true;
+});
 
-function draw(e) {
-  // mouse left button must be pressed
-  if (e.buttons !== 1) return;
+//Mouseup
+$(canvasElementDrawing).on('mouseup', function(e) {
+    mousedown = false;
+});
 
-  canvasDrawingCtx.beginPath(); // begin
+//Mousemove
+$(canvasElementDrawing).on('mousemove', function(e) {
+    mousex = parseInt(e.clientX-canvasx);
+    mousey = parseInt(e.clientY-canvasy);
+    if(mousedown) {
+        canvasDrawingCtx.beginPath();
+        if(tooltype=='draw') {
+            canvasDrawingCtx.globalCompositeOperation = 'source-over';
+            canvasDrawingCtx.strokeStyle = 'black';
+            canvasDrawingCtx.lineWidth = 3;
+        } else {
+            canvasDrawingCtx.globalCompositeOperation = 'destination-out';
+            canvasDrawingCtx.lineWidth = 10;
+        }
+        canvasDrawingCtx.moveTo(last_mousex,last_mousey);
+        canvasDrawingCtx.lineTo(mousex,mousey);
+        canvasDrawingCtx.lineJoin = 'round';
+        canvasDrawingCtx.lineCap = 'round';
+        canvasDrawingCtx.stroke();
+    }
+    last_mousex = mousex;
+    last_mousey = mousey;
+    //Output
+    $('#output').html('current: '+mousex+', '+mousey+'<br/>last: '+last_mousex+', '+last_mousey+'<br/>mousedown: '+mousedown);
+});
 
-  canvasDrawingCtx.lineWidth = 5;
-  canvasDrawingCtx.lineCap = 'round';
-  canvasDrawingCtx.strokeStyle = '#c0392b';
-
-  canvasDrawingCtx.moveTo(pos.x, pos.y); // from
-  setPosition(e);
-  canvasDrawingCtx.lineTo(pos.x, pos.y); // to
-
-  canvasDrawingCtx.stroke(); // draw it!
-}
+//Use draw|erase
+use_tool = function(tool) {
+    tooltype = tool; //update
+} 
 </script>
