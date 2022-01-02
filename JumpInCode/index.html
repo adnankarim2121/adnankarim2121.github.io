@@ -8,6 +8,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
+   <script src="src/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
+   <script src="src/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
+<!--    <script type="text/javascript" src="readFile.js"></script> -->
 </head>
 
 <style type="text/css">
@@ -17,7 +21,11 @@
     -webkit-transform:rotateY(180deg); /* Safari and Chrome */
     -moz-transform:rotateY(180deg); /* Firefox */
 }
-
+#editor {
+    position: absolute;
+    width: 1280px;
+    height: 720px;
+}
 
 </style>
 <body>
@@ -25,9 +33,11 @@
 
   <div style="overflow: scroll;" class="container">
     <video class="input_video" id="videoElement" hidden></video>
-    <canvas class="output_canvas" width="1280px" height="720px" style="z-index: 0;"></canvas>
+    <div id="editor" style="z-index: -1;">some text</div>
+    <canvas id = "layer1" class="output_canvas" width="1280px" height="720px" style="z-index: 1;"></canvas>
+    
      <canvas id="layer2" width="1280px" height="720px" 
-   style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
+   style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>
     <img id="uploadImage" width="220" height="277"  alt="The Scream" hidden>
 
         <label for="image_input" class="custom-file-upload">
@@ -45,6 +55,14 @@
     <option value="blue">Blue</option>
      <option value="highlight">Highlight</option>
   </select>
+
+
+  <label for="modeType">Choose mode:</label>
+  <select name="chooseMode" id="modeType">
+    <option value="drawing">Drawing</option>
+    <option value="editor">Editor</option>
+  </select>
+
   </div>
   <div class="control-panel">
 </body>

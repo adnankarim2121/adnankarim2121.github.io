@@ -1,3 +1,9 @@
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/javascript");
+//editor.session.setMode(new JavaScriptMode());
+//editor.setReadOnly(false);
+editor.insert("hello")
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
 
@@ -94,9 +100,24 @@ function updateVerticalPosition(keycode)
 }
 function onResults(results) {
 
-canvasElement.addEventListener('click', function() { 
 
-}, false);
+    //mode selection
+const modeType = document.getElementById('modeType')
+if(modeType.value == "drawing")
+{
+  console.log("in drwaring mode")
+  document.getElementById("layer1").style.zIndex = "1";
+  document.getElementById("layer2").style.zIndex = "2";
+  document.getElementById("editor").style.zIndex = "-1";
+}
+
+if(modeType.value == "editor")
+{
+  console.log("in editor mode")
+  document.getElementById("layer1").style.zIndex = "-1";
+  document.getElementById("layer2").style.zIndex = "1";
+  document.getElementById("editor").style.zIndex = "2";
+}
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   let width = updateHorizontalPosition()
@@ -211,6 +232,9 @@ $(canvasElementDrawing).on('mousemove', function(e) {
     last_mousey = mousey;
     //Output
     $('#output').html('current: '+mousex+', '+mousey+'<br/>last: '+last_mousex+', '+last_mousey+'<br/>mousedown: '+mousedown);
+
+
+
 });
 
 //Use draw|erase
@@ -222,3 +246,5 @@ select_color = function(value)
 {
   penColor = value;
 }
+
+
