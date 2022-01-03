@@ -6,6 +6,7 @@ const canvasElement = document.getElementsByClassName('output_canvas')[0];
 
 const canvasCtx = canvasElement.getContext('2d');
 
+var js = ace.createEditSession("some js code");
 
 // const background = document.getElementById("uploadImage");
 let i = 0
@@ -272,5 +273,7 @@ select_color = function(value)
 {
   penColor = value;
 }
+
+
 
 
