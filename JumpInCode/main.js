@@ -3,10 +3,12 @@ editor.setTheme("ace/theme/monokai");
 editor.session.setMode("ace/mode/javascript");
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
+var cameraReady = 0
+
 
 const canvasCtx = canvasElement.getContext('2d');
 
-var js = ace.createEditSession("some js code");
+
 
 // const background = document.getElementById("uploadImage");
 let i = 0
@@ -99,8 +101,9 @@ function updateVerticalPosition(keycode)
 function onResults(results) {
 
 
-    //mode selection
+//mode selection
 const modeType = document.getElementById('modeType')
+
 if(modeType.value == "drawing")
 {
   console.log("in drwaring mode")
@@ -189,13 +192,23 @@ selfieSegmentation.onResults(onResults);
 
 const camera = new Camera(videoElement, {
   onFrame: async () => {
+
     await selfieSegmentation.send({image: videoElement});
+    if(cameraReady == 0)
+    {
+      alert("Camera Ready! You can start using the application now ☺️")
+      cameraReady++
+    }
     
   },
   width: 1280,
   height: 720
 });
+// const modeType = document.getElementById('modeType')
+// // //by default, set to editor mode
+// modeType.value = "editor"
 camera.start();
+
 
 
 //drawing 
@@ -274,6 +287,8 @@ select_color = function(value)
   penColor = value;
 }
 
+
+ 
 
 
 

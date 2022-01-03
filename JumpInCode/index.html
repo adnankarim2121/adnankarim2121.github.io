@@ -55,7 +55,7 @@
     <canvas id = "layer1" class="output_canvas" width="1280px" height="720px" style="z-index: 1;"></canvas>
     
      <canvas id="layer2" width="1280px" height="720px" 
-   style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>
+   style="position: absolute; left: 0; top: 0; z-index: 2; overflow:scroll;"></canvas>
 <!--     <img id="uploadImage" width="220" height="277"  alt="The Scream" hidden>
 
         <label for="image_input" class="custom-file-upload">
@@ -65,8 +65,11 @@
       <div id="display_image"></div> -->
 
 
-      <input type="button" id="drawTool" value="draw"  />
+<input type="button" id="drawTool" value="draw"  />
 <input type="button" id="eraseTool" value="erase" />
+
+
+
 <label for="penChoiceColor">Choose a color:</label>
   <select name="penChoiceColor" id="penColor">
     <option value="black">Black</option>
