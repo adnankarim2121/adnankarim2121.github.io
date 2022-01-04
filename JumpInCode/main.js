@@ -420,3 +420,4 @@ function handleFileSelect(evt) {
 
   document.getElementById('upload').addEventListener('change', handleFileSelect, false);
 
+
