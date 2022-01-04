@@ -63,6 +63,8 @@
   <div style="overflow: scroll;" class="container">
     <video class="input_video" id="videoElement" hidden></video>
     <div id="editor" style="z-index: -1;"></div>
+    <br>
+    <input id="upload" type=file   name="files[]" size=30>
     <canvas id = "layer1" class="output_canvas" width="1280px" height="720px" style="z-index: 1;"></canvas>
     
      <canvas id="layer2" width="1280px" height="720px" 
@@ -104,11 +106,17 @@
     <option value="python">Python</option>
     <option value="cpp">C++</option>
     <option value="java">Java</option>
+    <option value="txt">Text File</option>
   </select>
 <br>
     Transcript Box
     <div id="transcriptBox">  </div>
     <input type="button" id="saveTranscript" value="transcript"  />
+
+
+
+
+
 
   </div>
   <div class="control-panel">

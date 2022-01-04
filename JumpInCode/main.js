@@ -242,6 +242,11 @@ if(editorLanguageSelect.value == "java")
   editor.session.setMode("ace/mode/java");
 }
 
+if(editorLanguageSelect.value == "txt")
+{
+  editor.session.setMode("ace/mode/text");
+}
+
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   let width = updateHorizontalPosition()
@@ -382,5 +387,36 @@ select_color = function(value)
 }
 
 
+function handleFileSelect(evt) {
+    let files = evt.target.files; // FileList object
 
+    // use the 1st file from the list
+    let f = files[0];
+    
+    let reader = new FileReader();
+
+    // Closure to capture the file information.
+    reader.onload = (function(theFile) {
+        return function(e) {
+          
+         // jQuery( '#ms_word_filtered_html' ).val( e.target.result );
+         if (f.name.split('.').pop() == "js" || f.name.split('.').pop() == "py" || f.name.split('.').pop() == "cpp" || f.name.split('.').pop() == "java"
+          || f.name.split('.').pop() == "txt")
+         {
+          editor.setValue( e.target.result);
+
+         }
+
+         else
+         {
+          alert("File not supported! You can upload .py, .js, .cpp files, .txt, or .java file extensions.")
+         }
+        };
+      })(f);
+
+      // Read in the image file as a data URL.
+      reader.readAsText(f);
+  }
+
+  document.getElementById('upload').addEventListener('change', handleFileSelect, false);
 
