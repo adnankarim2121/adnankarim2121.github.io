@@ -84,10 +84,19 @@ console.log("data is:" + data)
 
 
 recognition.onresult = (event) => {
+  var newLineCount = 0
   for (let i = event.resultIndex; i < event.results.length; i++) {
     let transcript = event.results[i][0].transcript
     if (event.results[i].isFinal) {
-      finalTranscript += transcript
+      if(finalTranscript.split(' ').length % 5 == 0)
+      {
+        finalTranscript = finalTranscript + transcript + "\n"
+      }
+      else
+      {
+        finalTranscript += transcript
+      }
+      
       interimTranscript = ''
     } else {
       interimTranscript = transcript
@@ -96,6 +105,7 @@ recognition.onresult = (event) => {
     html += '<i style="color:#777;">' + interimTranscript + '</i>'
     resultDiv.innerHTML = html
     console.log(finalTranscript)
+    console.log(finalTranscript.split(' ').length)
   }
 }
 
