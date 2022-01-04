@@ -11,7 +11,28 @@
    <script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
    <script src="src/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
    <script id="editorLanguage" src="src/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
-<!--    <script type="text/javascript" src="readFile.js"></script> -->
+
+   <!-- alertify stuff -->
+   <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<!-- CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+<!-- Default theme -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+<!-- Semantic UI theme -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css"/>
+<!-- Bootstrap theme -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css"/>
+
+<!-- 
+    RTL version
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.rtl.min.css"/>
+<!-- Default theme -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.rtl.min.css"/>
+<!-- Semantic UI theme -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.rtl.min.css"/>
+<!-- Bootstrap theme -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.rtl.min.css"/>
 </head>
 
 <style type="text/css">
@@ -49,6 +70,15 @@
 
 
 #transcriptBox {
+  width: 300px;
+  border: 1px solid green;
+  padding: 50px;
+  overflow-y: scroll;
+  margin: 20px;
+}
+
+
+#keyWordsBox {
   width: 300px;
   border: 1px solid green;
   padding: 50px;
@@ -97,6 +127,7 @@
   <select name="chooseMode" id="modeType">
     <option value="drawing">Drawing</option>
     <option value="editor">Editor</option>
+    <option value="highlightMode">Keyword Selection</option>
   </select>
 
 
@@ -114,6 +145,10 @@
     <input type="button" id="saveTranscript" value="Save Transcript"  />
 
 
+    Keywords by highlighting
+    <div id="keyWordsBox">  </div>
+    <input type="button" id="saveKeyWords" value="Save Keywords"  />
+
 
 
 
@@ -124,6 +159,8 @@
   <div class="control-panel">
 </body>
 </html>
+<script src="DragAndDrop.js">
+  </script>
 <script src="main.js">
 
 

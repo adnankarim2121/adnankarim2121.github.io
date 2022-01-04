@@ -1,10 +1,21 @@
-//var fs = require("fs");
+// dragDrop('#transcriptBox', {
+
+//   onDropText: (text, pos) => {
+//     console.log('Here is the dropped text:', text)
+//     console.log('Dropped at coordinates', pos.x, pos.y)
+//   }
+
+// })
+
+
 var editor = ace.edit("editor");
 editor.setTheme("ace/theme/monokai");
 editor.session.setMode("ace/mode/javascript");
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
 var cameraReady = 0
+var canSelectWords = false
+var keyWordBox = document.getElementById("keyWordsBox")
 
 
 const canvasCtx = canvasElement.getContext('2d');
@@ -40,7 +51,7 @@ let keyPressedVertical = false
 const resultDiv = document.getElementById('transcriptBox')
 let finalTranscript = ''
 window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition
-recognition = new webkitSpeechRecognition()
+var recognition = new webkitSpeechRecognition()
 recognition.lang = 'en-US'
 recognition.interimResults = true
 recognition.continuous = true
@@ -201,6 +212,7 @@ const modeType = document.getElementById('modeType')
 if(modeType.value == "drawing")
 {
   console.log("in drwaring mode")
+  canSelectWords = false
   document.getElementById("layer1").style.zIndex = "1";
   document.getElementById("layer2").style.zIndex = "2";
   document.getElementById("editor").style.zIndex = "-1";
@@ -212,12 +224,101 @@ if(modeType.value == "drawing")
 if(modeType.value == "editor")
 {
   console.log("in editor mode")
+  canSelectWords = false
   document.getElementById("layer1").style.zIndex = "-1";
   document.getElementById("layer2").style.zIndex = "1";
   document.getElementById("editor").style.zIndex = "2";
 
   document.getElementById("drawTool").style.display = 'none';
   document.getElementById("eraseTool").style.display = 'none';
+
+  editor.setReadOnly(false);
+}
+
+
+if(modeType.value == "highlightMode")
+{
+  canSelectWords = true
+  document.getElementById("layer1").style.zIndex = "-1";
+  document.getElementById("layer2").style.zIndex = "1";
+  document.getElementById("editor").style.zIndex = "2";
+
+  editor.setReadOnly(true);
+
+
+}
+
+
+
+function getSelectedText() {
+    var text = "";
+    if (typeof window.getSelection != "undefined") {
+        text = window.getSelection().toString();
+        console.log(text)
+    } else if (typeof document.selection != "undefined" && document.selection.type == "Text") {
+        text = document.selection.createRange().text;
+    }
+    return text;
+}
+
+function doSomethingWithSelectedText() {
+
+    var selectedText = editor.getSelectedText();
+    
+    if (selectedText != "" && canSelectWords)
+    {
+  //       alertify.confirm("This is a confirm dialog.",
+  // function(){
+  //   alertify.success('Ok');
+  // },
+  // function(){
+  //   alertify.error('Cancel');
+  // });
+      var lineNumber = editor.selection.getCursor().row + 1
+      keyWordBox.innerHTML += "Line number " +  lineNumber + ": " + selectedText + "<br />" 
+    }
+    
+}
+
+document.onmouseup = doSomethingWithSelectedText;
+//document.onkeyup = doSomethingWithSelectedText;
+
+
+
+ const saveKeyWordButton = document.getElementById('saveKeyWords')
+saveKeyWordButton.setAttribute("onclick","save_keywords('transcript');");
+
+save_keywords = function(value)
+{
+
+var loc = window.location.pathname;
+var dir = loc.substring(0, loc.lastIndexOf('/'));
+let data = keyWordBox.textContent
+console.log("data is:" + data)
+    var textToWrite = keyWordBox.innerHTML
+    var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+    var fileNameToSaveAs = "Keywords"
+      var downloadLink = document.createElement("a");
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "Download File";
+    if (window.webkitURL != null)
+    {
+        // Chrome allows the link to be clicked
+        // without actually adding it to the DOM.
+        downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+    }
+    else
+    {
+        // Firefox requires the link to be added to the DOM
+        // before it can be clicked.
+        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+    }
+
+    downloadLink.click();
+
 }
 
 //language selection
@@ -376,9 +477,14 @@ $(canvasElementDrawing).on('mousemove', function(e) {
 
 });
 
+
+
+
 //Use draw|erase
 use_tool = function(tool) {
     tooltype = tool; //update
+
+
 } 
 
 select_color = function(value)

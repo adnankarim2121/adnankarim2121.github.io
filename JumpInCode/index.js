@@ -4,6 +4,7 @@ const path = require('path')
 const app = express()
 const server = http.Server(app)
 
+
 app.use(express.static(__dirname))
 
 app.get('/', (req, res) => {
@@ -13,3 +14,4 @@ app.get('/', (req, res) => {
 server.listen(3000, () => {
   console.log('listening on 3000')
 })
+
