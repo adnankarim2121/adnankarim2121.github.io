@@ -1,3 +1,4 @@
+//var fs = require("fs");
 var editor = ace.edit("editor");
 editor.setTheme("ace/theme/monokai");
 editor.session.setMode("ace/mode/javascript");
@@ -31,6 +32,89 @@ let keyPressedVertical = false
 //    reader.readAsDataURL(this.files[0]);
 // });
 
+
+
+//speech
+
+
+const resultDiv = document.getElementById('transcriptBox')
+let finalTranscript = ''
+window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition
+recognition = new webkitSpeechRecognition()
+recognition.lang = 'en-US'
+recognition.interimResults = true
+recognition.continuous = true
+
+
+ const saveTranscriptButton = document.getElementById('saveTranscript')
+saveTranscriptButton.setAttribute("onclick","save_transcript('transcript');");
+
+save_transcript = function(value)
+{
+
+var loc = window.location.pathname;
+var dir = loc.substring(0, loc.lastIndexOf('/'));
+let data = finalTranscript
+console.log("data is:" + data)
+    var textToWrite = finalTranscript
+    var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+    var fileNameToSaveAs = "Transcript"
+      var downloadLink = document.createElement("a");
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "Download File";
+    if (window.webkitURL != null)
+    {
+        // Chrome allows the link to be clicked
+        // without actually adding it to the DOM.
+        downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+    }
+    else
+    {
+        // Firefox requires the link to be added to the DOM
+        // before it can be clicked.
+        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+    }
+
+    downloadLink.click();
+
+}
+
+
+recognition.onresult = (event) => {
+  for (let i = event.resultIndex; i < event.results.length; i++) {
+    let transcript = event.results[i][0].transcript
+    if (event.results[i].isFinal) {
+      finalTranscript += transcript
+      interimTranscript = ''
+    } else {
+      interimTranscript = transcript
+    }
+    let html = getHTML(finalTranscript)
+    html += '<i style="color:#777;">' + interimTranscript + '</i>'
+    resultDiv.innerHTML = html
+    console.log(finalTranscript)
+  }
+}
+
+
+function getHTML(transcript) {
+  let html = ''
+  let words = transcript.split(' ')
+  for (let j = 0; j < words.length; j++) {
+    let word = words[j]
+    html += `<i class="draggable" \
+                id="word-${j}-${word}"\
+                draggable="true" \
+                ondragstart="onDragStart(event)" \
+                >` + word + '</i>' + ' '
+  }
+  return html
+}
+
+recognition.start()
 
 document.addEventListener("keydown", function(event) {
   console.log(event.which);
@@ -287,8 +371,6 @@ select_color = function(value)
   penColor = value;
 }
 
-
- 
 
 
 

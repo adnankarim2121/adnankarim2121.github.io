@@ -21,6 +21,8 @@
     -webkit-transform:rotateY(180deg); /* Safari and Chrome */
     -moz-transform:rotateY(180deg); /* Firefox */
 }
+
+
 #editor {
     position: absolute;
     width: 720px;
@@ -43,6 +45,15 @@
 
   height: auto;
 
+}
+
+
+#transcriptBox {
+  width: 300px;
+  border: 1px solid green;
+  padding: 50px;
+  overflow-y: scroll;
+  margin: 20px;
 }
 
 </style>
@@ -95,6 +106,10 @@
     <option value="java">Java</option>
   </select>
 
+    Transcript Box
+    <div id="transcriptBox">  </div>
+    <input type="button" id="saveTranscript" value="transcript"  />
+    
   </div>
   <div class="control-panel">
 </body>
