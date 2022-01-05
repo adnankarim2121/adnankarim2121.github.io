@@ -87,6 +87,7 @@ select {
   }
 }
 
+
 #transcriptBox, #keyWordsBox {
   min-height : 100px;
   background-color : #c14543;
@@ -146,10 +147,18 @@ select {
 }
 
 
+input[type="file"] {
+    display: none;
+    
+}
 
+/*#drawTool, #eraseTool, #clearDrawings
+{
+  display:inline-block;
+}*/
 
 /* CSS */
-input {
+input[type="button"], .custom-file-upload  {
   align-items: center;
   background-color: #fee6e3;
   border: 2px solid #111;
@@ -173,7 +182,11 @@ input {
   touch-action: manipulation;
 }
 
-input:after {
+.custom-file-upload  {
+  max-width: 250px;
+}
+
+input[type="button"]:after, .custom-file-upload:after  {
   background-color: #111;
   border-radius: 8px;
   content: "";
@@ -188,24 +201,26 @@ input:after {
   z-index: -1;
 }
 
-input:hover:after {
+input[type="button"]:hover:after,  .custom-file-upload:hover:after{
   transform: translate(0, 0);
 }
 
-input:active {
+input[type="button"]:active,  .custom-file-upload:active{
   background-color: #ffdeda;
   outline: 0;
 }
 
-input:hover {
+input[type="button"]:hover,  .custom-file-upload:hover {
   outline: 0;
 }
 
 @media (min-width: 768px) {
-  input {
+  input[type="button"],  .custom-file-upload {
     padding: 0 40px;
   }
 }
+
+
 
 
 
@@ -222,22 +237,19 @@ input:hover {
     
      <canvas id="layer2" width="1280px" height="740px" 
    style="position: absolute; left: 0; top: 0; z-index: 2; overflow:scroll;"></canvas>
-<!--     <img id="uploadImage" width="220" height="277"  alt="The Scream" hidden>
+<div id="drawingToolsSection" style="float: right;" >
 
-        <label for="image_input" class="custom-file-upload">
-    Upload Screenshot of Code (Or any image really):
-</label> -->
-<!--           <input type="file" id="image_input" accept="image/*">
-      <div id="display_image"></div> -->
-
-<input id="upload" type=file   name="files[]" size=30>
+  <h3>Drawing Tools</h3>
+  <br> 
 <input type="button" id="drawTool" value="Drawing Mode"  />
+<br>
 <input type="button" id="eraseTool" value="Erase Mode" />
+<br>
 <input type="button" id="clearDrawings" value="Erase All Drawings" />
+<br>
 
-
-
-<label for="penChoiceColor">Choose a color:</label>
+<!-- <label for="penChoiceColor">Pen Color:</label> -->
+<h3>Pen Color</h3>
   <select name="penChoiceColor" id="penColor">
     <option value="black">Black</option>
     <option value="red">Red</option>
@@ -246,7 +258,21 @@ input:hover {
      <option value="highlight">Highlight</option>
   </select>
 
+</div>
 
+<div id="wrapper">
+<div id="uploadFileSection" style="display:inline-block;"> 
+<label for="upload" class="custom-file-upload">
+    Upload File
+</label>
+<input id="upload" type=file   name="files[]" >
+</div>
+
+
+
+
+
+<div id="Mode Selection" style="margin-left: 40px; display:inline-block;">
   <label for="modeType">Choose mode:</label>
   <select name="chooseMode" id="modeType">
     <option value="drawing">Drawing</option>
@@ -263,16 +289,24 @@ input:hover {
     <option value="java">Java</option>
     <option value="txt">Text File</option>
   </select>
+</div>
+
+</div>
 <br>
-    Transcript Box
-    <div id="transcriptBox">  </div>
+<div id="wrapperForTranscriptAndKeyWordBox">
+  <div id="transcriptBoxDiv" style="display:inline-block;">
+    <h3>Transcript Box</h3>
+    <div id="transcriptBox" >  </div>
     <input type="button" id="saveTranscript" value="Save Transcript"  />
+  </div>
 
+  <div id="keyWordsBoxDiv" style="display:inline-block;">
 
-    Keywords by highlighting
-    <div id="keyWordsBox">  </div>
+    <h3>Keywords by highlighting</h3>
+    <div id="keyWordsBox" >  </div>
     <input type="button" id="saveKeyWords" value="Save Keywords"  />
-
+  </div>
+</div>
 
 
 
