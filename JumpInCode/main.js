@@ -455,6 +455,7 @@ var mousedown = false;
 var tooltype = 'erase';
 var penColor = 'black';
 
+
 //Mousedown
 $(canvasElementDrawing).on('mousedown', function(e) {
     last_mousex = mousex = parseInt(e.clientX-canvasx);
