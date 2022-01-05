@@ -137,6 +137,29 @@ function getHTML(transcript) {
 
 recognition.start()
 
+
+const muteButton = document.getElementById('muteButton')
+
+
+muteButton.onclick = function()
+{
+  value = muteButton.value
+  console.log(value)
+  if (value == "Mute")
+  {
+    recognition.stop()
+    muteButton.value = "Unmute"
+  }
+
+  else
+  {
+    recognition.start()
+    muteButton.value = "Mute"
+  }
+
+
+}
+
 document.addEventListener("keydown", function(event) {
   console.log(event.which);
   if(event.which == 68 || event.which == 65)
@@ -457,7 +480,7 @@ $(canvasElementDrawing).on('mousemove', function(e) {
             if(colorChoice.value == "highlight")
             {
               console.log("in here")
-              canvasDrawingCtx.strokeStyle = 'rgba(255, 255, 0, 0.1)'
+              canvasDrawingCtx.strokeStyle = 'rgba(253, 255, 50, 0.5)'
               canvasDrawingCtx.lineWidth = 30;
             }
         } else {
