@@ -11,6 +11,7 @@
    <script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
    <script src="src/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
    <script id="editorLanguage" src="src/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"> 
 
    <!-- alertify stuff -->
    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
@@ -36,6 +37,62 @@
 </head>
 
 <style type="text/css">
+body {
+  background-color: lightblue;
+  font-family: 'Montserrat', sans-serif;
+  /*display: grid;*/
+  /*place-items: center;*/
+  /*height: 100vh;*/
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  //background:  linear-gradient(to bottom, white 0%, pink 100%);
+}
+
+
+select {
+ 
+  background-color: #e6e6e6;
+  /*width: auto;*/
+  /*float: left;*/
+  max-width: 100%;
+  border-radius: 2px;
+  select {
+    font-family: "helvetica neue", helvetica;
+    font-size: 1rem;
+    font-weight: 200;
+    max-width: 100%;
+    padding: 8px 24px 8px 10px;
+    border: none;
+    background-color: transparent;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    &:active,
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+  &:after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    margin-top: -2px;
+    right: 8px;
+    width: 0; 
+    height: 0; 
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #aaa;
+  }
+}
+
+#transcriptBox, #keyWordsBox {
+  min-height : 100px;
+  background-color : #c14543;
+  margin : 2px !important;
+  border-radius: 25px;
+}
 	#videoElement
 {
     transform: rotateY(180deg);
@@ -88,6 +145,70 @@
   margin: 20px;
 }
 
+
+
+
+/* CSS */
+input {
+  align-items: center;
+  background-color: #fee6e3;
+  border: 2px solid #111;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #111;
+  cursor: pointer;
+  display: flex;
+  font-family: Inter,sans-serif;
+  font-size: 16px;
+  height: 48px;
+  justify-content: center;
+  line-height: 24px;
+  max-width: 100%;
+  padding: 0 25px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+input:after {
+  background-color: #111;
+  border-radius: 8px;
+  content: "";
+  display: block;
+  height: 48px;
+  left: 0;
+  width: 100%;
+  position: absolute;
+  top: -2px;
+  transform: translate(8px, 8px);
+  transition: transform .2s ease-out;
+  z-index: -1;
+}
+
+input:hover:after {
+  transform: translate(0, 0);
+}
+
+input:active {
+  background-color: #ffdeda;
+  outline: 0;
+}
+
+input:hover {
+  outline: 0;
+}
+
+@media (min-width: 768px) {
+  input {
+    padding: 0 40px;
+  }
+}
+
+
+
 </style>
 <body>
 	
@@ -110,8 +231,8 @@
       <div id="display_image"></div> -->
 
 <input id="upload" type=file   name="files[]" size=30>
-<input type="button" id="drawTool" value="draw"  />
-<input type="button" id="eraseTool" value="erase" />
+<input type="button" id="drawTool" value="Drawing Mode"  />
+<input type="button" id="eraseTool" value="Erase Mode" />
 <input type="button" id="clearDrawings" value="Erase All Drawings" />
 
 
