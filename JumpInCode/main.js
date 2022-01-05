@@ -416,9 +416,11 @@ camera.start();
   const canvasElementDrawing = document.getElementById('layer2');
   const drawButton = document.getElementById('drawTool');
   const eraseButton = document.getElementById('eraseTool');
+  const clearDrawingsButton = document.getElementById('clearDrawings');
   const colorChoice = document.getElementById('penColor')
   drawButton.setAttribute("onclick","use_tool('draw');");
   eraseButton.setAttribute("onclick","use_tool('erase');");
+  clearDrawingsButton.setAttribute("onclick","clearDrawings();");
   const canvasDrawingCtx = canvasElementDrawing.getContext('2d');
  var canvasx = $(canvasElementDrawing).offset().left;
 var canvasy = $(canvasElementDrawing).offset().top;
@@ -477,6 +479,10 @@ $(canvasElementDrawing).on('mousemove', function(e) {
 
 });
 
+clearDrawings = function()
+{
+  canvasDrawingCtx.clearRect(0, 0, canvasElementDrawing.width, canvasElementDrawing.height);
+}
 
 
 
