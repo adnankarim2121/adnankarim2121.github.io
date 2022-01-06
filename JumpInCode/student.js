@@ -18,7 +18,7 @@ var canSelectWords = false
 var keyWordBox = document.getElementById("keyWordsBox")
 
 
-const canvasCtx = canvasElement.getContext('2d');
+// const canvasCtx = canvasElement.getContext('2d');
 
 
 
@@ -236,7 +236,7 @@ if(modeType.value == "drawing")
 {
   console.log("in drwaring mode")
   canSelectWords = false
-  document.getElementById("layer1").style.zIndex = "1";
+  // document.getElementById("layer1").style.zIndex = "1";
   document.getElementById("layer2").style.zIndex = "2";
   document.getElementById("editor").style.zIndex = "-1";
 
@@ -248,7 +248,7 @@ if(modeType.value == "editor")
 {
   console.log("in editor mode")
   canSelectWords = false
-  document.getElementById("layer1").style.zIndex = "-1";
+  // document.getElementById("layer1").style.zIndex = "-1";
   document.getElementById("layer2").style.zIndex = "1";
   document.getElementById("editor").style.zIndex = "2";
 
@@ -262,7 +262,7 @@ if(modeType.value == "editor")
 if(modeType.value == "highlightMode")
 {
   canSelectWords = true
-  document.getElementById("layer1").style.zIndex = "-1";
+  // document.getElementById("layer1").style.zIndex = "-1";
   document.getElementById("layer2").style.zIndex = "1";
   document.getElementById("editor").style.zIndex = "2";
 
@@ -371,43 +371,43 @@ if(editorLanguageSelect.value == "txt")
   editor.session.setMode("ace/mode/text");
 }
 
-  canvasCtx.save();
-  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  let width = updateHorizontalPosition()
-  let height = updateVerticalPosition()
-  //this handles the segmentation mask
-  canvasCtx.drawImage(results.segmentationMask, width, height,
-                      canvasElement.width-600, canvasElement.height-500);
+  // canvasCtx.save();
+  // canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  // let width = updateHorizontalPosition()
+  // let height = updateVerticalPosition()
+  // //this handles the segmentation mask
+  // canvasCtx.drawImage(results.segmentationMask, width, height,
+  //                     canvasElement.width-600, canvasElement.height-500);
 
 
 
-  // Only overwrite existing pixels.
-  canvasCtx.globalCompositeOperation = 'source-in';
-  canvasCtx.fillStyle = '#00FF00';
-  canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+  // // Only overwrite existing pixels.
+  // canvasCtx.globalCompositeOperation = 'source-in';
+  // canvasCtx.fillStyle = '#00FF00';
+  // canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
 
-  // Only overwrite missing pixels.
+  // // Only overwrite missing pixels.
 
-  //this handles the actual image/stream
-  canvasCtx.drawImage(
-      results.image, width, height, canvasElement.width-600, canvasElement.height-500);
+  // //this handles the actual image/stream
+  // canvasCtx.drawImage(
+  //     results.image, width, height, canvasElement.width-600, canvasElement.height-500);
 
-    canvasCtx.globalCompositeOperation = 'destination-atop';
-    // canvasCtx.drawImage(
-    //   background, 0, 0, canvasElement.width, canvasElement.height);
+  //   canvasCtx.globalCompositeOperation = 'destination-atop';
+  //   // canvasCtx.drawImage(
+  //   //   background, 0, 0, canvasElement.width, canvasElement.height);
 
-  canvasCtx.restore();
+  // canvasCtx.restore();
 }
 
 
-const selfieSegmentation = new SelfieSegmentation({locateFile: (file) => {
-  return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
-}});
-selfieSegmentation.setOptions({
-  modelSelection: 1,
-  selfieMode: true,
-});
-selfieSegmentation.onResults(onResults);
+// const selfieSegmentation = new SelfieSegmentation({locateFile: (file) => {
+//   return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
+// }});
+// selfieSegmentation.setOptions({
+//   modelSelection: 1,
+//   selfieMode: true,
+// });
+// selfieSegmentation.onResults(onResults);
 
 
 

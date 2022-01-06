@@ -240,8 +240,9 @@ if(modeType.value == "drawing")
   document.getElementById("layer2").style.zIndex = "2";
   document.getElementById("editor").style.zIndex = "-1";
 
-  document.getElementById("drawTool").style.display = 'block';
-  document.getElementById("eraseTool").style.display = 'block';
+  document.getElementById("drawTool").disabled = false;
+  document.getElementById("eraseTool").disabled = false;
+  document.getElementById("clearDrawings").disabled = false;
 }
 
 if(modeType.value == "editor")
@@ -252,8 +253,9 @@ if(modeType.value == "editor")
   document.getElementById("layer2").style.zIndex = "1";
   document.getElementById("editor").style.zIndex = "2";
 
-  document.getElementById("drawTool").style.display = 'none';
-  document.getElementById("eraseTool").style.display = 'none';
+  document.getElementById("drawTool").disabled = true;
+  document.getElementById("eraseTool").disabled = true;
+  document.getElementById("clearDrawings").disabled = true;
 
   editor.setReadOnly(false);
 }
@@ -265,6 +267,11 @@ if(modeType.value == "highlightMode")
   document.getElementById("layer1").style.zIndex = "-1";
   document.getElementById("layer2").style.zIndex = "1";
   document.getElementById("editor").style.zIndex = "2";
+
+
+    document.getElementById("drawTool").disabled = true;
+  document.getElementById("eraseTool").disabled = true;
+  document.getElementById("clearDrawings").disabled = true;
 
   editor.setReadOnly(true);
 
