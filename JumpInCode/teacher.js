@@ -419,7 +419,8 @@ const camera = new Camera(videoElement, {
     await selfieSegmentation.send({image: videoElement});
     if(cameraReady == 0)
     {
-      alert("Camera Ready! You can start using the application now ☺️")
+      //alert("Camera Ready! You can start using the application now ☺️")
+      document.getElementById('loader').style.visibility="hidden";
       cameraReady++
     }
     
@@ -432,6 +433,29 @@ const camera = new Camera(videoElement, {
 // modeType.value = "editor"
 camera.start();
 
+
+
+const videoButton = document.getElementById('videoButton')
+
+
+videoButton.onclick = function()
+{
+  value = videoButton.value
+  console.log(value)
+  if (value == "Off")
+  {
+    camera.stop()
+    videoButton.value = "On"
+  }
+
+  else
+  {
+    camera.start()
+    videoButton.value = "Off"
+  }
+
+
+}
 
 
 //drawing 

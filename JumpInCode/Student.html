@@ -2,7 +2,7 @@
 <html>
 <link rel="icon" type="image/png" href="uofc.png">
 <head>
-  <title>Jump in Code Homepage</title>
+  <title>Jump in Code Student Mode</title>
   <meta charset="utf-8">
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
@@ -173,7 +173,7 @@ input[type="file"] {
 h3
 {
     font-family: 'Bangers', cursive;
-  font-size: 50px;
+  font-size: 25px;
 }
 
 label, p
@@ -268,54 +268,122 @@ option
   font-family: 'Bangers', cursive;
 }
 
-
-#selection
+#drawingToolsSection
 {
-  display: flex;
-justify-content: center;
-
-}
-
-h3{
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  margin-top: -75px;
-  margin-left: -125px;
-}
-
-
-#teacherButton
-{
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  margin-top: -0px;
-  margin-left: 0px;
-}
-
-#studentButton
-{
-    position: fixed;
-  top: 50%;
-  left: 50%;
-  margin-top: 0px;
-  margin-left: -150px;
+  position: relative;
+  float: right;
+  left:-300px;
 }
 
 
 </style>
 <body>
-<div id="selection">
-<h3>Choose Mode</h3>
-<br> 
+	
 
-<input type="button" id="teacherButton" value="Teacher" onclick="window.location.href='Teacher.html'" />
+  <div style="overflow: scroll;" class="container">
+    <video class="input_video" id="videoElement" hidden></video>
+    <div id="editor" style="z-index: -1;"></div>
+    <br>
+    
+    <canvas id = "layer1" class="output_canvas" width="1280px" height="720px" style="z-index: 1;"></canvas>
+    
+     <canvas class="drawingCanvas" id="layer2" width="1350px" height="735px" 
+   style="position: absolute; left: 0; top: 0; z-index: 2; overflow:scroll;">
+     
+   </canvas>
+<div id="drawingToolsSection" style="" >
+
+  <h3>Drawing Tools</h3>
+  <br> 
+<input type="button" id="drawTool" value="Drawing Mode"  />
 <br>
-<input type="button" id="studentButton" value="Student" onclick="window.location.href='Student.html'"/>
+<input type="button" id="eraseTool" value="Erase Mode" />
 <br>
+<input type="button" id="clearDrawings" value="Erase All Drawings" />
+<br>
+
+<!-- <label for="penChoiceColor">Pen Color:</label> -->
+<h3>Pen Color</h3>
+  <select name="penChoiceColor" id="penColor" onchange="this.className=this.options[this.selectedIndex].className"
+    class="black">
+    <option class= "black" value="black">Black</option>
+    <option class="red" value="red">Red</option>
+    <option class="green" value="green">Green</option>
+    <option class="blue" value="blue">Blue</option>
+
+  </select>
+
+
+<br>
+
+<h3>Mic Controls</h3>
+<input type="button" id="muteButton" value="Mute" />
+<br>
+
 </div>
 
+<div id="wrapper">
+<div id="uploadFileSection" style="display:inline-block;"> 
+<label for="upload" class="custom-file-upload">
+    Upload File
+</label>
+<input id="upload" type=file   name="files[]" >
+</div>
+
+
+
+
+
+<div id="Mode Selection" style="margin-left: 40px; display:inline-block;">
+  <label for="modeType">Choose mode:</label>
+  <select name="chooseMode" id="modeType">
+    <option value="drawing">Drawing Mode &#9999;</option>
+    <option value="editor">Editor Mode &#128187; </option>
+    <option value="highlightMode">Keyword Selection &#x2757;</option>
+  </select>
+
+
+    <label for="editorLanguage">Choose language:</label>
+  <select name="chooseMode" id="editorLanguageSelect">
+    <option value="javascript">JavaScript   
+&#128187;</option>
+    <option value="python">Python &#128013;</option>
+    <option value="cpp">C&#10133;&#10133;</option>
+    <option value="java">Java   
+&#9749;</option>
+    <option value="txt">Text File &#128466;&#65039;</option>
+  </select>
+</div>
+
+</div>
+<br>
+<div id="wrapperForTranscriptAndKeyWordBox">
+  <div id="transcriptBoxDiv" style="display:inline-block;">
+    <h3>Transcript Box</h3>
+    <div id="transcriptBox" >  </div>
+    <input type="button" id="saveTranscript" value="Save Transcript"  />
+  </div>
+
+  <div id="keyWordsBoxDiv" style="display:inline-block;">
+
+    <h3>Keywords by highlighting</h3>
+    <div id="keyWordsBox" >  </div>
+    <input type="button" id="saveKeyWords" value="Save Keywords"  />
+  </div>
+</div>
+
+
+
+
+
+
+  </div>
+  <div class="control-panel">
 </body>
 </html>
+<script src="DragAndDrop.js">
+  </script>
+<script src="student.js">
 
+
+</script>
