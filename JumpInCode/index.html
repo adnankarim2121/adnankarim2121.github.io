@@ -72,7 +72,7 @@ select {
   max-width: 100%;
   border-radius: 2px;
   select {
-    font-family: "helvetica neue", helvetica;
+    font-family: 'Bangers', cursive;
     font-size: 1rem;
     font-weight: 200;
     max-width: 100%;
@@ -251,7 +251,20 @@ input[type="button"]:hover,  .custom-file-upload:hover {
 }
 
 
+.green{ background-color:green; 
+color:green;}
 
+.blue{ background-color:blue; 
+color:blue;}
+
+.red{ background-color:red; 
+color:red;}
+.black{ background-color:black;
+color:black; }
+option
+{
+  font-family: 'Bangers', cursive;
+}
 
 
 </style>
@@ -282,12 +295,13 @@ input[type="button"]:hover,  .custom-file-upload:hover {
 
 <!-- <label for="penChoiceColor">Pen Color:</label> -->
 <h3>Pen Color</h3>
-  <select name="penChoiceColor" id="penColor">
-    <option value="black">Black</option>
-    <option value="red">Red</option>
-    <option value="green">Green</option>
-    <option value="blue">Blue</option>
-     <option value="highlight">Highlight</option>
+  <select name="penChoiceColor" id="penColor" onchange="this.className=this.options[this.selectedIndex].className"
+    class="black">
+    <option class= "black" value="black">Black</option>
+    <option class="red" value="red">Red</option>
+    <option class="green" value="green">Green</option>
+    <option class="blue" value="blue">Blue</option>
+
   </select>
 
 
@@ -314,19 +328,21 @@ input[type="button"]:hover,  .custom-file-upload:hover {
 <div id="Mode Selection" style="margin-left: 40px; display:inline-block;">
   <label for="modeType">Choose mode:</label>
   <select name="chooseMode" id="modeType">
-    <option value="drawing">Drawing</option>
-    <option value="editor">Editor</option>
-    <option value="highlightMode">Keyword Selection</option>
+    <option value="drawing">Drawing Mode &#9999;</option>
+    <option value="editor">Editor Mode &#128187; </option>
+    <option value="highlightMode">Keyword Selection &#x2757;</option>
   </select>
 
 
     <label for="editorLanguage">Choose language:</label>
   <select name="chooseMode" id="editorLanguageSelect">
-    <option value="javascript">JavaScript</option>
-    <option value="python">Python</option>
-    <option value="cpp">C++</option>
-    <option value="java">Java</option>
-    <option value="txt">Text File</option>
+    <option value="javascript">JavaScript   
+&#128187;</option>
+    <option value="python">Python &#128013;</option>
+    <option value="cpp">C&#10133;&#10133;</option>
+    <option value="java">Java   
+&#9749;</option>
+    <option value="txt">Text File &#128466;&#65039;</option>
   </select>
 </div>
 
