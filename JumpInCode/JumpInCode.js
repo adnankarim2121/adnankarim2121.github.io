@@ -13,20 +13,44 @@ editor.setTheme("ace/theme/monokai");
 editor.session.setMode("ace/mode/javascript");
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
+var vidElementOnly = document.getElementById('videoElement')
 var cameraReady = 0
 var canSelectWords = false
 var keyWordBox = document.getElementById("keyWordsBox")
+var model;
+let videoInterval = 100
+var updatedPose;
+var updatePoseOnce = 0
+var leftIndexFingerSinceCamFlipped;
 
+const modelParams = {
+  flipHorizontal: true,   // flip e.g for video 
+  imageScaleFactor: 0.7,  // reduce input image size .
+  maxNumBoxes: 20,        // maximum number of boxes to detect
+  iouThreshold: 0.5,      // ioU threshold for non-max suppression
+  scoreThreshold: 0.79,    // confidence threshold for predictions.
+}
 
 const canvasCtx = canvasElement.getContext('2d');
 
 
+
+// Load the model.
+handTrack.load(modelParams).then(lmodel => {
+    // detect objects in the image.
+    console.log("model loaded")
+    model = lmodel
+    
+
+});
 
 // const background = document.getElementById("uploadImage");
 let i = 0
 let temp = 0
 let previousHorizontalPosition = 0
 let previousVerticalPosition = 0
+
+let previousHorizontalIndexLeftPosition = 0
 let keyPressedHorizonal = false
 let keyPressedVertical = false
 
@@ -176,6 +200,9 @@ document.addEventListener("keydown", function(event) {
 
 })
 
+
+
+
 function updateHorizontalPosition(keycode)
 {
 	if (i == 0)
@@ -227,9 +254,10 @@ function updateVerticalPosition(keycode)
 
 }
 function onResults(results) {
-
+ // runDetection()
 
 //mode selection
+
 const modeType = document.getElementById('modeType')
 
 if(modeType.value == "drawing")
@@ -377,7 +405,7 @@ if(editorLanguageSelect.value == "txt")
 {
   editor.session.setMode("ace/mode/text");
 }
-
+  
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   let width = updateHorizontalPosition()
@@ -399,23 +427,44 @@ if(editorLanguageSelect.value == "txt")
   canvasCtx.drawImage(
       results.image, width, height, canvasElement.width-600, canvasElement.height-500);
 
-    canvasCtx.globalCompositeOperation = 'destination-atop';
+    
     // canvasCtx.drawImage(
     //   background, 0, 0, canvasElement.width, canvasElement.height);
+ canvasCtx.globalCompositeOperation = 'source-over';
+      // drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS,
+      //            {color: '#00FF00', lineWidth: 4});
+      console.log(typeof(results.poseLandmarks[20]))
+      //leftIndexFingerSinceCamFlipped = {x:results.poseLandmarks[20].x,y:results.poseLandmarks[20].y-0.1,z:results.poseLandmarks[20].z}
+  // drawLandmarks(canvasCtx, [leftIndexFingerSinceCamFlipped],
+  //               {color: '#FF0000', lineWidth: 2});
 
   canvasCtx.restore();
 }
 
 
-const selfieSegmentation = new SelfieSegmentation({locateFile: (file) => {
-  return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
-}});
-selfieSegmentation.setOptions({
-  modelSelection: 1,
-  selfieMode: true,
-});
-selfieSegmentation.onResults(onResults);
+// const selfieSegmentation = new SelfieSegmentation({locateFile: (file) => {
+//   return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
+// }});
+// selfieSegmentation.setOptions({
+//   modelSelection: 1,
+//   selfieMode: true,
+// });
+// selfieSegmentation.onResults(onResults);
 
+
+const pose = new Pose({locateFile: (file) => {
+  return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
+}});
+pose.setOptions({
+  modelComplexity: 1,
+  selfieMode: true,
+  smoothLandmarks: true,
+  enableSegmentation: true,
+  smoothSegmentation: true,
+  minDetectionConfidence: 0.5,
+  minTrackingConfidence: 0.5
+});
+pose.onResults(onResults);
 
 
 
@@ -423,12 +472,13 @@ selfieSegmentation.onResults(onResults);
 const camera = new Camera(videoElement, {
   onFrame: async () => {
 
-    await selfieSegmentation.send({image: videoElement});
+    await pose.send({image: videoElement});
     if(cameraReady == 0)
     {
       //alert("Camera Ready! You can start using the application now ☺️")
       document.getElementById('loader').style.visibility="hidden";
       cameraReady++
+      
     }
     
   },
@@ -439,6 +489,31 @@ const camera = new Camera(videoElement, {
 // // //by default, set to editor mode
 // modeType.value = "editor"
 camera.start();
+
+
+
+
+
+
+function runDetection() {
+  console.log("in here")
+    model.detect(videoElement).then(predictions => {
+        // console.log("Predictions: ", predictions);
+        // get the middle x value of the bounding box and map to paddle location
+        console.log(predictions[0])
+        if (videoButton.value == "On") {
+            setTimeout(() => {
+                runDetection(videoElement)
+            }, videoInterval);
+        }
+    });
+}
+
+
+
+
+
+
 
 
 
@@ -544,6 +619,7 @@ clearDrawings = function()
 //Use draw|erase
 use_tool = function(tool) {
     tooltype = tool; //update
+
 
 
 } 
