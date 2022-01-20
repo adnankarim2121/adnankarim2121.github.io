@@ -33,16 +33,14 @@ const modelParams = {
 
 const canvasCtx = canvasElement.getContext('2d');
 
+// fetch("https://type.fit/api/quotes")
+//   .then(function(response) {
+//     return response.json();
+//   })
+//   .then(function(data) {
+//     console.log(data);
+//   });
 
-
-// Load the model.
-handTrack.load(modelParams).then(lmodel => {
-    // detect objects in the image.
-    console.log("model loaded")
-    model = lmodel
-    
-
-});
 
 // const background = document.getElementById("uploadImage");
 let i = 0
@@ -83,6 +81,8 @@ recognition.continuous = true
 
  const saveTranscriptButton = document.getElementById('saveTranscript')
 saveTranscriptButton.setAttribute("onclick","save_transcript('transcript');");
+
+
 
 save_transcript = function(value)
 {
@@ -262,7 +262,7 @@ const modeType = document.getElementById('modeType')
 
 if(modeType.value == "drawing")
 {
-  console.log("in drwaring mode")
+  //console.log("in drwaring mode")
   canSelectWords = false
   document.getElementById("layer1").style.zIndex = "1";
   document.getElementById("layer2").style.zIndex = "2";
@@ -275,7 +275,7 @@ if(modeType.value == "drawing")
 
 if(modeType.value == "editor")
 {
-  console.log("in editor mode")
+  //console.log("in editor mode")
   canSelectWords = false
   document.getElementById("layer1").style.zIndex = "-1";
   document.getElementById("layer2").style.zIndex = "1";
@@ -433,7 +433,7 @@ if(editorLanguageSelect.value == "txt")
  canvasCtx.globalCompositeOperation = 'source-over';
       // drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS,
       //            {color: '#00FF00', lineWidth: 4});
-      console.log(typeof(results.poseLandmarks[20]))
+      //console.log(typeof(results.poseLandmarks[20]))
       //leftIndexFingerSinceCamFlipped = {x:results.poseLandmarks[20].x,y:results.poseLandmarks[20].y-0.1,z:results.poseLandmarks[20].z}
   // drawLandmarks(canvasCtx, [leftIndexFingerSinceCamFlipped],
   //               {color: '#FF0000', lineWidth: 2});

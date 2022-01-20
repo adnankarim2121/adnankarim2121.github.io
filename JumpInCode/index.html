@@ -12,10 +12,17 @@
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"> </script>
+   <!-- <script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"> </script> -->
    <script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
    <script src="src/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
    <script id="editorLanguage" src="src/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
+
+   <script src=”https://aframe.io/releases/0.9.0/aframe.min.js”></script>
+
+<script src=”https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js”></script>
+<!-- Load the qna model. -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/qna"> </script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css?family=Bangers" rel="stylesheet">
 
@@ -41,6 +48,20 @@
 <!-- Bootstrap theme -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.rtl.min.css"/>
 </head>
+
+
+<a-scene embedded arjs=’sourceType: webcam; debugUIEnabled: false;’>
+
+<a-marker preset=’hiro’’>
+
+<a-box position=’0 1 0′ material=’opacity: 0.5; color: #F70087;’></a-box>
+
+</a-marker>
+
+<a-entity camera></a-entity>
+
+</a-scene>
+
 
 <style type="text/css">
 
@@ -422,6 +443,7 @@ option
     <h3>Transcript Box</h3>
     <div id="transcriptBox" >  </div>
     <input type="button" id="saveTranscript" value="Save Transcript"  />
+
   </div>
 
   <div id="keyWordsBoxDiv" style="display:inline-block;">
